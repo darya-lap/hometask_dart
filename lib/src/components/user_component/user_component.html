@@ -3,12 +3,6 @@
     <label>ID: </label>  {{user.id}}
   </div>
   <div>
-    <label>User Type: </label>
-    <select [(ngModel)]="user.userType">
-      <option *ngFor="let c of userTypes" [ngValue]="c">{{c}}</option>
-    </select>
-  </div>
-  <div>
     <label>Full Name: </label>
     <input [(ngModel)]="user.fullName" placeholder="fullName" />
   </div>
@@ -31,6 +25,6 @@
     <!--</select>-->
   <!--</div>-->
   <!--<button (click)="goBack()">Back</button>-->
-  <button (click)="save()">Save</button>
+  <!--<button (click)="save()">Save</button>-->
 </div>
 

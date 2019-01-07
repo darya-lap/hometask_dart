@@ -2,7 +2,7 @@ import 'package:angular_tour_of_heroes/src/components/models/user/user.dart';
 import 'package:angular_tour_of_heroes/src/enums/user_type.dart';
 
 class RegularUser extends User{
-  final bool _isAdmin;
+  bool _isAdmin;
 
   bool get isAdmin => _isAdmin;
 
@@ -12,7 +12,7 @@ class RegularUser extends User{
 
   RegularUser(String id, DateTime regDate, String fullName, String email, bool isAdmin) : super(id, regDate, fullName, email){
     this.userType = UserType.REGULAR;
-    this.isAdmin = isAdmin;
+    _isAdmin = isAdmin;
   }
 
   @override

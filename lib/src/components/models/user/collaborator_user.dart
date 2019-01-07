@@ -16,7 +16,4 @@ class CollaboratorUser extends User{
 
   factory CollaboratorUser.fromJson(Map<String, dynamic> user) => CollaboratorUser(user['id'], DateTime.parse(user['regDate']), user['fullName'], user['email']);
 
-  RegularUser convertToRegular(){
-
-  }
 }

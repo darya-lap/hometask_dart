@@ -3,7 +3,7 @@ import 'package:angular_tour_of_heroes/src/enums/access_level.dart';
 import 'package:angular_tour_of_heroes/src/enums/user_type.dart';
 
 class AdminUser extends User{
-  final bool _isAdmin;
+  bool _isAdmin;
   AccessLevel _accessLevel;
 
   AccessLevel get accessLevel => _accessLevel;
@@ -15,7 +15,7 @@ class AdminUser extends User{
   bool get isAdmin => _isAdmin;
 
   set isAdmin(bool admin){
-    this.isAdmin = admin;
+    _isAdmin = admin;
   }
 
   AdminUser(String id, DateTime regDate, String fullName, String email, AccessLevel level, bool isAdmin) : super(id, regDate, fullName, email){

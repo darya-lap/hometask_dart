@@ -24,35 +24,35 @@ class UserComponent{
   final UserService _userService;
   final userTypes = UserType.values;
   final accessLevels = AccessLevel.values;
-//
-//  bool get isRegular => user.userType == UserType.REGULAR;
-//  bool get isAdministrator => user.userType == UserType.ADMINISTRATOR;
-//
-//
-//  bool get isAdminField => isRegular || isAdministrator;
-//  bool get isAccessTypeField => isAdministrator;
 
-//  bool get isAdmin {
-//    if (isRegular) {
-//      return (user as RegularUser).isAdmin;
-//    } else if (isAdministrator) {
-//      return (user as AdminUser).isAdmin;
-//    }
-//    return null;
-//  }
-//
-//  set isAdmin(bool val){
-//    if (isRegular) {
-//      (user as RegularUser).isAdmin = val;
-//    } else if (isAdministrator) {
-//      (user as AdminUser).isAdmin = val;
-//    }
-//  }
+  bool get isRegular => user.userType == UserType.REGULAR;
+  bool get isAdministrator => user.userType == UserType.ADMINISTRATOR;
 
-//  String get accessType{
-//    if(isAccessTypeField) return (user as AdminUser).accessLevel.value;
-//    return null;
-//  }
+
+  bool get isAdminField => isRegular || isAdministrator;
+  bool get isAccessTypeField => isAdministrator;
+
+  bool get isAdmin {
+    if (isRegular) {
+      return (user as RegularUser).isAdmin;
+    } else if (isAdministrator) {
+      return (user as AdminUser).isAdmin;
+    }
+    return null;
+  }
+
+  set isAdmin(bool val){
+    if (isRegular) {
+      (user as RegularUser).isAdmin = val;
+    } else if (isAdministrator) {
+      (user as AdminUser).isAdmin = val;
+    }
+  }
+
+  String get accessType{
+    if(isAccessTypeField) return (user as AdminUser).accessLevel.value;
+    return null;
+  }
 //  final Location _location;
 
   UserComponent(this._userService);

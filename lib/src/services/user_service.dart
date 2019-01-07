@@ -19,9 +19,7 @@ class UserService {
 
   Future<List<User>> getAll() async {
     try {
-      print('DEBUG: memememe');
       final response = await _http.get(_usersUrl);
-      print('DEBUG: $response');
       final users = (_extractData(response) as List)
           .map((json) => fromJson(json))
           .toList();
