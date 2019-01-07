@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="column">
+    <div style="margin-top: 10px">
+      <button (click)="activateAddNew()">
+        Add New Group
+      </button>
+    </div>
+
+    <div style="margin-top: 10px">
+      <group-search (goDescription)="goToDescription($event)"></group-search>
+    </div>
+
+    <ul class="groups">
+      <li *ngFor="let group of groups"
+          [class.selected]="group === selected"
+          (click)="onSelect(group)">
+        <span class="badge">{{group.id}}</span>
+        <span>{{group.name}}</span>
+        <button class="delete"
+                (click)="delete(group); $event.stopPropagation()">x</button>
+      </li>
+    </ul>
+  </div>
+  <div class="column">
+
+    <div *ngIf="selected != null && !isAddNewActive">
+      <group-desc [group]="selected" (save)="updateContent($event)"></group-desc>
+    </div>
+
+    <div *ngIf="isAddNewActive">
+      <add-group (add)="addGroupToList($event)"></add-group>
+    </div>
+
+
+  </div>
+  <div class="column">
+  </div>
+</div>
+
+
+
+
+

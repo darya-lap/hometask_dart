@@ -23,14 +23,10 @@ class UserComponent implements OnChanges{
   final UserService _userService;
   final userTypes = UserType.values;
   final accessLevels = AccessLevel.values;
-//  final _open= StreamController<User>.broadcast();
-//
-//
-//  @Input()
-//  User user;
-//
-//  @Output()
-//  Stream get open => _open.stream;
+  final _save= StreamController<User>.broadcast();
+
+  @Output()
+  Stream get save => _save.stream;
 
   bool get isRegular => user.userType == UserType.REGULAR;
   bool get isAdministrator => user.userType == UserType.ADMINISTRATOR;
@@ -61,8 +57,8 @@ class UserComponent implements OnChanges{
 
   UserComponent(this._userService);
 
-  Future<void> save() async {
-    await _userService.update(toJson());
+  Future<void> saveChanges() async {
+    await _userService.update(toJson()).then((user) {_save.add(user);});
   }
 
   @override
@@ -73,7 +69,6 @@ class UserComponent implements OnChanges{
     currentFullName = user.fullName;
     currentEmail = user.email;
     currentRegDate = user.regDate.toString();
-    print('DEBUG: ON CHANGES');
   }
 
   Map<String, dynamic> toJson() => {'id':user.id, 'regDate':currentRegDate, 'fullName':currentFullName, 'email':currentEmail,

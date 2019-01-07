@@ -52,26 +52,16 @@ class UserService {
     print(e); // for demo purposes only
     return Exception('Server error; cause: $e');
   }
-//
-//  Future<User> get(int id) async {
-//    try {
-//      final response = await _http.get('$_usersUrl/$id');
-//
-//      return fromJson(_extractData(response));
-//    } catch (e) {
-//      throw _handleError(e);
-//    }
-//  }
 
-//  Future<User> create(String name) async {
-//    try {
-//      final response = await _http.post(_heroesUrl,
-//          headers: _headers, body: json.encode({'name': name}));
-//      return Hero.fromJson(_extractData(response));
-//    } catch (e) {
-//      throw _handleError(e);
-//    }
-//  }
+  Future<User> create(Map<String, dynamic> jsonMap) async {
+    try {
+      final response = await _http.post(_usersUrl,
+          headers: _headers, body: json.encode(jsonMap));
+      return UserService.fromJson(_extractData(response));
+    } catch (e) {
+      throw _handleError(e);
+    }
+  }
 
   Future<User> update(Map <String, dynamic> jsonMap) async {
     try {

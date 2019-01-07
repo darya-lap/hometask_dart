@@ -1,12 +1,15 @@
-<!--<div>-->
-  <!--<label>Hero name:</label> <input #heroName />-->
-  <!--<button (click)="add(heroName.value); heroName.value=''">-->
-    <!--Add-->
-  <!--</button>-->
-<!--</div>-->
-
 <div class="row">
   <div class="column">
+    <div style="margin-top: 10px">
+      <button (click)="activateAddNew()">
+        Add New User
+      </button>
+    </div>
+
+    <div style="margin-top: 10px">
+      <user-search (goDescription)="goToDescription($event)"></user-search>
+    </div>
+
     <ul class="users">
       <li *ngFor="let user of users"
           [class.selected]="user === selected"
@@ -20,12 +23,17 @@
   </div>
   <div class="column">
 
-      <div *ngIf="selected != null">
-        <user-desc [user]="selected"></user-desc>
+    <div *ngIf="selected != null && !isAddNewActive">
+      <user-desc [user]="selected" (save)="updateContent($event)"></user-desc>
     </div>
+
+    <div *ngIf="isAddNewActive">
+      <add-user (add)="addUserToList($event)"></add-user>
+    </div>
+
+
   </div>
   <div class="column">
-
   </div>
 </div>
 
