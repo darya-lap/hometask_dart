@@ -7,12 +7,12 @@ class RegularUser extends User{
   bool get isAdmin => _isAdmin;
 
   set isAdmin(bool admin){
-    isAdmin = admin;
+    _isAdmin = admin;
   }
 
   RegularUser(String id, DateTime regDate, String fullName, String email, bool isAdmin) : super(id, regDate, fullName, email){
     this.userType = UserType.REGULAR;
-    _isAdmin = isAdmin;
+    this.isAdmin = isAdmin;
   }
 
   @override

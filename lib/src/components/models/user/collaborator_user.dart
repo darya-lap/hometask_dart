@@ -1,4 +1,3 @@
-import 'package:angular_tour_of_heroes/src/components/models/user/regular_user.dart';
 import 'package:angular_tour_of_heroes/src/components/models/user/user.dart';
 import 'package:angular_tour_of_heroes/src/enums/user_type.dart';
 

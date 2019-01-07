@@ -75,7 +75,6 @@ class UserService {
 
   Future<User> update(User user) async {
     try {
-      print('DEBUG: UPDATEEEEEEEEEEEe');
       final url = '$_usersUrl/${user.id}';
       final response =
           await _http.put(url, headers: _headers, body: json.encode(user));

@@ -3,28 +3,33 @@
     <label>ID: </label>  {{user.id}}
   </div>
   <div>
+    <label>User Type: </label>
+    <select [(ngModel)]="currentSelectedUserType">
+      <option *ngFor="let c of userTypes" [ngValue]="c">{{c}}</option>
+    </select>
+  </div>
+  <div>
     <label>Full Name: </label>
-    <input [(ngModel)]="user.fullName" placeholder="fullName" />
+    <input [(ngModel)]="currentFullName" placeholder="fullName" />
   </div>
   <div>
     <label>e-mail: </label>
-    <input [(ngModel)]="user.email" placeholder="e-mail" />
+    <input [(ngModel)]="currentEmail" placeholder="e-mail" />
   </div>
   <div>
     <label>Registration Date: </label>
-    <input [(ngModel)]="user.regDate" placeholder="regDate" />
+    <input [(ngModel)]="currentRegDate" placeholder="regDate" />
   </div>
-  <!--<div *ngIf="isAdminField">-->
-    <!--<label>Is Administrator: </label>-->
-    <!--isAdmin-->
-  <!--</div>-->
-  <!--<div *ngIf="isAccessTypeField">-->
-    <!--<label>Access Level: </label>-->
-    <!--<select [(ngModel)]="accessLevel">-->
-      <!--<option *ngFor="let c of accessLevels" [ngValue]="c">{{c}}</option>-->
-    <!--</select>-->
-  <!--</div>-->
-  <!--<button (click)="goBack()">Back</button>-->
-  <!--<button (click)="save()">Save</button>-->
+  <div *ngIf="currentSelectedUserType.value == 'Regular' || currentSelectedUserType.value == 'Administrator'">
+    <label>Is Administrator: </label>
+    {{isAdmin}}
+  </div>
+  <div *ngIf="currentSelectedUserType.value == 'Administrator'">
+    <label>Access Level: </label>
+    <select [(ngModel)]="currentSelectedAccessLevel">
+      <option *ngFor="let c of accessLevels" [ngValue]="c">{{c}}</option>
+    </select>
+  </div>
+  <button (click)="save()">Save</button>
 </div>
 

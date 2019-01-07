@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:angular/angular.dart';
 import 'package:angular_forms/angular_forms.dart';
-import 'package:angular_router/angular_router.dart';
 import 'package:angular_tour_of_heroes/src/components/models/user/admin_user.dart';
 import 'package:angular_tour_of_heroes/src/components/models/user/regular_user.dart';
 import 'package:angular_tour_of_heroes/src/components/models/user/user.dart';
@@ -16,7 +15,7 @@ import 'package:angular_tour_of_heroes/src/services/user_service.dart';
   styleUrls: ['user_component.css'],
   directives: [coreDirectives, formDirectives],
 )
-class UserComponent{
+class UserComponent implements OnChanges{
 
   @Input()
   User user;
@@ -29,8 +28,13 @@ class UserComponent{
   bool get isAdministrator => user.userType == UserType.ADMINISTRATOR;
 
 
-  bool get isAdminField => isRegular || isAdministrator;
   bool get isAccessTypeField => isAdministrator;
+
+  UserType currentSelectedUserType;
+  AccessLevel currentSelectedAccessLevel;
+  String currentFullName;
+  String currentEmail;
+  String currentRegDate;
 
   bool get isAdmin {
     if (isRegular) {
@@ -38,36 +42,35 @@ class UserComponent{
     } else if (isAdministrator) {
       return (user as AdminUser).isAdmin;
     }
-    return null;
+    return false;
   }
 
-  set isAdmin(bool val){
-    if (isRegular) {
-      (user as RegularUser).isAdmin = val;
-    } else if (isAdministrator) {
-      (user as AdminUser).isAdmin = val;
-    }
-  }
-
-  String get accessType{
+  String get accessLevel{
     if(isAccessTypeField) return (user as AdminUser).accessLevel.value;
     return null;
   }
-//  final Location _location;
+
+  set accessLevel(String type){
+    (user as AdminUser).accessLevel = AccessLevel.parse(type);
+  }
 
   UserComponent(this._userService);
 
-//  @override
-//  void onActivate(_, RouterState current) async {
-//    final id = getId(current.parameters);
-//    if (id != null) hero = await (_heroService.get(id));
-//  }
-
   Future<void> save() async {
     await _userService.update(user);
-//    goBack();
   }
 
-//  void goBack() => _location.back();
+  @override
+  void ngOnChanges(Map<String, SimpleChange> changes) {
+    currentSelectedUserType = user.userType;
+    if (currentSelectedUserType == UserType.ADMINISTRATOR) currentSelectedAccessLevel = (user as AdminUser).accessLevel;
+    else currentSelectedAccessLevel = null;
+    currentFullName = user.fullName;
+    currentEmail = user.email;
+    currentRegDate = user.regDate.toString();
+  }
+
+ // Map toJson() => {'id':id, 'regDate':regDate.toString(), 'fullName':fullName, 'email':email, 'isAdmin':isAdmin, 'userType':userType.value};
+
 
 }
