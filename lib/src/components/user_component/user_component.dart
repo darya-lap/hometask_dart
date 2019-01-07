@@ -23,12 +23,17 @@ class UserComponent implements OnChanges{
   final UserService _userService;
   final userTypes = UserType.values;
   final accessLevels = AccessLevel.values;
+//  final _open= StreamController<User>.broadcast();
+//
+//
+//  @Input()
+//  User user;
+//
+//  @Output()
+//  Stream get open => _open.stream;
 
   bool get isRegular => user.userType == UserType.REGULAR;
   bool get isAdministrator => user.userType == UserType.ADMINISTRATOR;
-
-
-  bool get isAccessTypeField => isAdministrator;
 
   UserType currentSelectedUserType;
   AccessLevel currentSelectedAccessLevel;
@@ -46,7 +51,7 @@ class UserComponent implements OnChanges{
   }
 
   String get accessLevel{
-    if(isAccessTypeField) return (user as AdminUser).accessLevel.value;
+    if(isAdministrator) return (user as AdminUser).accessLevel.value;
     return null;
   }
 
@@ -57,20 +62,20 @@ class UserComponent implements OnChanges{
   UserComponent(this._userService);
 
   Future<void> save() async {
-    await _userService.update(user);
+    await _userService.update(toJson());
   }
 
   @override
   void ngOnChanges(Map<String, SimpleChange> changes) {
     currentSelectedUserType = user.userType;
     if (currentSelectedUserType == UserType.ADMINISTRATOR) currentSelectedAccessLevel = (user as AdminUser).accessLevel;
-    else currentSelectedAccessLevel = null;
+    else currentSelectedAccessLevel = AccessLevel.REDUCED;
     currentFullName = user.fullName;
     currentEmail = user.email;
     currentRegDate = user.regDate.toString();
+    print('DEBUG: ON CHANGES');
   }
 
- // Map toJson() => {'id':id, 'regDate':regDate.toString(), 'fullName':fullName, 'email':email, 'isAdmin':isAdmin, 'userType':userType.value};
-
-
+  Map<String, dynamic> toJson() => {'id':user.id, 'regDate':currentRegDate, 'fullName':currentFullName, 'email':currentEmail,
+  'isAdmin':isAdmin, 'userType':currentSelectedUserType.value, 'accessLevel':currentSelectedAccessLevel.value};
 }

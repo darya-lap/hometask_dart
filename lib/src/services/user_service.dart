@@ -73,11 +73,12 @@ class UserService {
 //    }
 //  }
 
-  Future<User> update(User user) async {
+  Future<User> update(Map <String, dynamic> jsonMap) async {
     try {
-      final url = '$_usersUrl/${user.id}';
+      final url = '$_usersUrl/${jsonMap['id']}';
       final response =
-          await _http.put(url, headers: _headers, body: json.encode(user));
+          await _http.put(url, headers: _headers, body: json.encode(jsonMap));
+
       return UserService.fromJson(_extractData(response));
     } catch (e) {
       throw _handleError(e);
