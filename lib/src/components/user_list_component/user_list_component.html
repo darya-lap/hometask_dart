@@ -1,0 +1,35 @@
+<!--<div>-->
+  <!--<label>Hero name:</label> <input #heroName />-->
+  <!--<button (click)="add(heroName.value); heroName.value=''">-->
+    <!--Add-->
+  <!--</button>-->
+<!--</div>-->
+
+<div class="row">
+  <div class="column">
+    <ul class="users">
+      <li *ngFor="let user of users"
+          [class.selected]="user === selected"
+          (click)="onSelect(user)">
+        <span class="badge">{{user.id}}</span>
+        <span>{{user.fullName}}</span>
+        <button class="delete"
+                (click)="delete(user); $event.stopPropagation()">x</button>
+      </li>
+    </ul>
+  </div>
+  <div class="column">
+
+      <div *ngIf="selected != null">
+        <user-desc [user]="selected"></user-desc>
+    </div>
+  </div>
+  <div class="column">
+
+  </div>
+</div>
+
+
+
+
+
