@@ -40,9 +40,6 @@ class AddUserSearchComponent implements OnInit {
         .handleError((e) {
       print(e);
     });
-
-    print('DEBUG: ON ITIN');
-    print('DEBUG: $users');
   }
 
   void addUser(User user) async{
