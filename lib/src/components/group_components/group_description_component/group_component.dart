@@ -6,6 +6,7 @@ import 'package:angular_tour_of_heroes/src/components/group_components/group_use
 import 'package:angular_tour_of_heroes/src/components/models/group/group.dart';
 import 'package:angular_tour_of_heroes/src/components/models/user/user.dart';
 import 'package:angular_tour_of_heroes/src/services/group_service.dart';
+import 'package:angular_tour_of_heroes/src/services/relation_service.dart';
 
 @Component(
   selector: 'group-desc',
@@ -19,6 +20,7 @@ import 'package:angular_tour_of_heroes/src/services/group_service.dart';
 class GroupComponent implements OnChanges{
 
   GroupService _groupService;
+  RelationService _relationService;
 
   @Input()
   Group group;
@@ -31,16 +33,15 @@ class GroupComponent implements OnChanges{
   String currentName;
   List<User> admins;
 
-  GroupComponent(this._groupService);
+  GroupComponent(this._groupService, this._relationService);
 
   Future<void> saveChanges() async {
     await _groupService.update(toJson()).then((group) {_save.add(group);});
   }
 
   Future<void> delete(User admin) async {
-//    await _groupService.delete(group.id);
-//    groups.remove(group);
-//    if (selected == group) selected = null;
+    await _relationService.update({'userId':admin.id,'groupId':group.id,'isAdmin':false});
+    admins.remove(admin);
   }
 
   void deleteUser(String userId){

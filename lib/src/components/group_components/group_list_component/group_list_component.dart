@@ -6,6 +6,7 @@ import 'package:angular_tour_of_heroes/src/components/group_components/group_des
 import 'package:angular_tour_of_heroes/src/components/group_components/group_search_component/group_search_component.dart';
 import 'package:angular_tour_of_heroes/src/components/models/group/group.dart';
 import 'package:angular_tour_of_heroes/src/services/group_service.dart';
+import 'package:angular_tour_of_heroes/src/services/relation_service.dart';
 
 @Component(
   selector: 'my-groups',
@@ -16,6 +17,7 @@ import 'package:angular_tour_of_heroes/src/services/group_service.dart';
     AddGroupComponent,
     GroupSearchComponent
  ],
+  providers: [RelationService,],
   pipes: [commonPipes],
 )
 class GroupListComponent implements OnInit {

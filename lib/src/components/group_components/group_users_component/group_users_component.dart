@@ -40,6 +40,12 @@ class GroupUsersComponent implements OnChanges {
     users.remove(user);
   }
 
+  bool isAdmin(User user){
+    return group.admins.where((userMap) => userMap.id == user.id).isNotEmpty;
+  }
+
   @override
-  void ngOnChanges(Map<String, SimpleChange> changes) => users = group.users;
+  void ngOnChanges(Map<String, SimpleChange> changes) {
+    users = group.users;
+  }
 }
