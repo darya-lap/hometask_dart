@@ -23,10 +23,10 @@ class GroupUsersComponent implements OnChanges {
   List<User> users;
 
   final RelationService _relationService;
-  final _delete= StreamController<String>.broadcast();
+  final _changes= StreamController<Map<String,dynamic>>.broadcast();
 
   @Output()
-  Stream get deleteStream => _delete.stream;
+  Stream get changesStream => _changes.stream;
 
   @Input()
   Group group;
@@ -35,10 +35,18 @@ class GroupUsersComponent implements OnChanges {
 
   Future<void> delete(User user) async {
     await _relationService.delete(group.id, user.id).then((map) {
-      _delete.add(map['userId']);
+      _changes.add({'delete':map['userId']});
     });
     users.remove(user);
   }
+
+  Future<void> makeAdmin(User user) async {
+    await _relationService.update({'userId':user.id,'groupId':group.id,'isAdmin':true}).then((map) {
+      _changes.add({'makeAdmin':user.id});
+    });
+  }
+
+
 
   bool isAdmin(User user){
     return group.admins.where((userMap) => userMap.id == user.id).isNotEmpty;

@@ -44,8 +44,17 @@ class GroupComponent implements OnChanges{
     admins.remove(admin);
   }
 
+  void changeUserList(Map<String,dynamic> map){
+    if (map['delete'] != null) deleteUser(map['delete']);
+    if (map['makeAdmin'] != null) updateAdminList(map['makeAdmin']);
+  }
+
   void deleteUser(String userId){
     admins.removeWhere((admin) => admin.id == userId);
+  }
+
+  void updateAdminList(String userId){
+    admins.add(group.users.firstWhere((user) => user.id == userId));
   }
 
   @override

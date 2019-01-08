@@ -18,21 +18,21 @@ class InMemoryDataService extends MockClient {
       'isAdmin': true,
       'accessLevel': 'FULL'
     },
-//    {
-//      'id': '2',
-//      'regDate': '2019-01-02 00:00:00',
-//      'fullName': 'Crazy Frog',
-//      'email': 'frog@gmail.com',
-//      'userType': 'Regular',
-//      'isAdmin': false
-//    },
-//    {
-//      'id': '3',
-//      'regDate': '2019-01-03 00:00:00',
-//      'fullName': 'Harry Potter',
-//      'email': 'harry@gmail.com',
-//      'userType': 'Collaborator'
-//    },
+    {
+      'id': '2',
+      'regDate': '2019-01-02 00:00:00',
+      'fullName': 'Crazy Frog',
+      'email': 'frog@gmail.com',
+      'userType': 'Regular',
+      'isAdmin': false
+    },
+    {
+      'id': '3',
+      'regDate': '2019-01-03 00:00:00',
+      'fullName': 'Harry Potter',
+      'email': 'harry@gmail.com',
+      'userType': 'Collaborator'
+    },
     {
       'id': '4',
       'regDate': '2019-01-04 00:00:00',
@@ -42,13 +42,13 @@ class InMemoryDataService extends MockClient {
       'isAdmin': true,
       'accessLevel': 'REDUCED'
     },
-//    {
-//      'id': '5',
-//      'regDate': '2019-01-05 00:00:00',
-//      'fullName': 'It',
-//      'email': 'it@gmail.com',
-//      'userType': 'Collaborator',
-//    },
+    {
+      'id': '5',
+      'regDate': '2019-01-05 00:00:00',
+      'fullName': 'It',
+      'email': 'it@gmail.com',
+      'userType': 'Collaborator',
+    },
   ];
 
   static final _initialGroups = [
@@ -60,11 +60,11 @@ class InMemoryDataService extends MockClient {
   ];
 
   static final _initialRelationsUserGroup = [
-    {'userId':'1','groupId':1,'isAdmin':false},
-    {'userId':'1','groupId':4,'isAdmin':false},
-//    {'userId':'2','groupId':2,'isAdmin':false},
-//    {'userId':'3','groupId':3,'isAdmin':false},
-    {'userId':'4','groupId':4,'isAdmin':false},
+    {'userId':'1','groupId':1,'isAdmin':true},
+    {'userId':'1','groupId':4,'isAdmin':true},
+    {'userId':'2','groupId':2,'isAdmin':false},
+    {'userId':'3','groupId':3,'isAdmin':false},
+    {'userId':'4','groupId':4,'isAdmin':true},
   ];
 
   static List<Map<String, dynamic>> _usersDb;
@@ -119,7 +119,7 @@ class InMemoryDataService extends MockClient {
             String prefix;
             switch(request.url.queryParameters.keys.first){
               case 'idOrName':
-                prefix = request.url.queryParameters['idOrName'] ?? '';
+                prefix = request.url.queryParameters['idOrName'];
                 final regExp = RegExp(prefix, caseSensitive: false);
                 List<Map<String,dynamic>> groups = List.from(_groupsDb.where((group) => group['id'].toString().contains(regExp) ||
                     group['name'].contains(regExp)).toList());
@@ -131,7 +131,7 @@ class InMemoryDataService extends MockClient {
                 data = groups;
                 break;
               case 'id':
-                prefix = request.url.queryParameters['id'] ?? '';
+                prefix = request.url.queryParameters['id'];
                 Map<String,dynamic> group = Map.from(_groupsDb.firstWhere((group) => group['id'].toString() == prefix));
                 var usersAndAdmins = _getGroupUsersAndAdmins(group);
                 group['users'] = usersAndAdmins['users'];
@@ -177,10 +177,17 @@ class InMemoryDataService extends MockClient {
         }
         if (url.path.indexOf('/groups') >= 0) {
           var groupChanges = json.decode(request.body);
-          var targetUser = _groupsDb.firstWhere((group) => group['id'] == groupChanges['id']);
-          _groupsDb.remove(targetUser);
+          var targetGroup = _groupsDb.firstWhere((group) => group['id'] == groupChanges['id']);
+          _groupsDb.remove(targetGroup);
           _groupsDb.add(groupChanges);
           data = groupChanges;
+        }
+        if (url.path.indexOf('/relations') >= 0) {
+          var relationChanges = json.decode(request.body);
+          var targetRelation = _relationDb.firstWhere((group) => group['id'] == relationChanges['id']);
+          _relationDb.remove(targetRelation);
+          _relationDb.add(relationChanges);
+          data = relationChanges;
         }
         break;
       case 'DELETE':

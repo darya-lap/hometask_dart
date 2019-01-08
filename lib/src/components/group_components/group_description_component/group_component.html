@@ -22,6 +22,6 @@
     </div>
   </div>
   <div class="column">
-    <group-users [group]="group" (deleteStream)="deleteUser($event)"></group-users>
+    <group-users [group]="group" (changesStream)="changeUserList($event)"></group-users>
   </div>
 </div>
