@@ -5,6 +5,7 @@ import 'package:angular_forms/angular_forms.dart';
 import 'package:angular_tour_of_heroes/src/components/models/user/admin_user.dart';
 import 'package:angular_tour_of_heroes/src/components/models/user/regular_user.dart';
 import 'package:angular_tour_of_heroes/src/components/models/user/user.dart';
+import 'package:angular_tour_of_heroes/src/components/user_components/user_groups_component/user_groups_component.dart';
 import 'package:angular_tour_of_heroes/src/enums/access_level.dart';
 import 'package:angular_tour_of_heroes/src/enums/user_type.dart';
 import 'package:angular_tour_of_heroes/src/services/user_service.dart';
@@ -13,7 +14,10 @@ import 'package:angular_tour_of_heroes/src/services/user_service.dart';
   selector: 'user-desc',
   templateUrl: 'user_component.html',
   styleUrls: ['user_component.css'],
-  directives: [coreDirectives, formDirectives],
+  directives: [coreDirectives,
+    formDirectives,
+    UserGroupsComponent
+  ],
 )
 class UserComponent implements OnChanges{
 

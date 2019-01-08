@@ -28,3 +28,13 @@ button:disabled {
   color: #ccc;
   cursor: auto;
 }
+
+.row {
+  display: flex;
+}
+
+.column {
+  flex: 80%;
+    min-width: 470px;
+}
+

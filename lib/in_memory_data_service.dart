@@ -3,10 +3,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:angular_tour_of_heroes/src/components/models/group/group.dart';
 import 'package:angular_tour_of_heroes/src/components/models/group_user_relation/group_user_relation.dart';
-import 'package:angular_tour_of_heroes/src/components/models/user/user.dart';
-import 'package:angular_tour_of_heroes/src/services/user_service.dart';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
 
@@ -22,21 +19,21 @@ class InMemoryDataService extends MockClient {
       'isAdmin': true,
       'accessLevel': 'FULL'
     },
-    {
-      'id': '2',
-      'regDate': '2019-01-02 00:00:00',
-      'fullName': 'Crazy Frog',
-      'email': 'frog@gmail.com',
-      'userType': 'Regular',
-      'isAdmin': false
-    },
-    {
-      'id': '3',
-      'regDate': '2019-01-03 00:00:00',
-      'fullName': 'Harry Potter',
-      'email': 'harry@gmail.com',
-      'userType': 'Collaborator'
-    },
+//    {
+//      'id': '2',
+//      'regDate': '2019-01-02 00:00:00',
+//      'fullName': 'Crazy Frog',
+//      'email': 'frog@gmail.com',
+//      'userType': 'Regular',
+//      'isAdmin': false
+//    },
+//    {
+//      'id': '3',
+//      'regDate': '2019-01-03 00:00:00',
+//      'fullName': 'Harry Potter',
+//      'email': 'harry@gmail.com',
+//      'userType': 'Collaborator'
+//    },
     {
       'id': '4',
       'regDate': '2019-01-04 00:00:00',
@@ -46,13 +43,13 @@ class InMemoryDataService extends MockClient {
       'isAdmin': true,
       'accessLevel': 'REDUCED'
     },
-    {
-      'id': '5',
-      'regDate': '2019-01-05 00:00:00',
-      'fullName': 'It',
-      'email': 'it@gmail.com',
-      'userType': 'Collaborator',
-    },
+//    {
+//      'id': '5',
+//      'regDate': '2019-01-05 00:00:00',
+//      'fullName': 'It',
+//      'email': 'it@gmail.com',
+//      'userType': 'Collaborator',
+//    },
   ];
 
   static final _initialGroups = [
@@ -66,31 +63,34 @@ class InMemoryDataService extends MockClient {
   static final _initialRelationsUserGroup = [
     {'userId':'1','groupId':1,'isAdmin':false},
     {'userId':'1','groupId':4,'isAdmin':false},
-    {'userId':'2','groupId':2,'isAdmin':false},
-    {'userId':'3','groupId':3,'isAdmin':false},
+//    {'userId':'2','groupId':2,'isAdmin':false},
+//    {'userId':'3','groupId':3,'isAdmin':false},
     {'userId':'4','groupId':4,'isAdmin':false},
   ];
 
-  static List<User> _usersDb;
+  static List<Map<String, dynamic>> _usersDb;
   static int _nextUserId;
 
-  static List<Group> _groupsDb;
+  static List<Map<String, dynamic>> _groupsDb;
   static int _nextGroupId;
 
-  static List<GroupUserRelation> _relationUserGroupDb;
+  static List<Map<String, dynamic>> _relationDb;
+  static int _nextRelationId;
+
 
   static Future<Response> _handler(Request request) async {
-    if (_usersDb == null) resetUserDb();
-    if (_groupsDb == null) resetGroupDb();
-    if (_relationUserGroupDb == null) resetRelationUserGroupDb();
+    if (_usersDb == null) _resetUserDb();
+    if (_groupsDb == null) _resetGroupDb();
+    if (_relationDb == null) _resetRelationUserGroupDb();
     var data;
     var relations;
+    List<GroupUserRelation> usersWithGroups;
     switch (request.method) {
       case 'GET':
         final url = request.url;
         if (url.path.indexOf('/users') >= 0) {
           if (url.pathSegments.last == 'users'){
-            data = _usersDb.where((user) => true).toList();
+            data = _usersDb;
           }
           if (request.url.queryParameters.isNotEmpty){
             String prefix;
@@ -98,12 +98,18 @@ class InMemoryDataService extends MockClient {
               case 'idOrName':
                 prefix = request.url.queryParameters['idOrName'] ?? '';
                 final regExp = RegExp(prefix, caseSensitive: false);
-                data = _usersDb.where((user) => user.id.contains(regExp) ||
-                    user.fullName.contains(regExp)).toList();
+                List<Map<String,dynamic>> users = List.from(_usersDb.where((user) => user['id'].contains(regExp) ||
+                    user['fullName'].contains(regExp)).toList());
+                users.forEach((user) {
+                  user['userGroups'] = _getUserGroups(user);
+                });
+                data = users;
                 break;
               case 'id':
                 prefix = request.url.queryParameters['id'] ?? '';
-                data = _usersDb.firstWhere((user) => user.id == prefix);
+                Map<String,dynamic> user = Map.from(_usersDb.firstWhere((user) => user['id'] == prefix));
+                user['userGroups'] = _getUserGroups(user);
+                data = user;
                 break;
             }
           }
@@ -111,7 +117,7 @@ class InMemoryDataService extends MockClient {
 
         if (url.path.indexOf('/groups') >= 0) {
           if (url.pathSegments.last == 'groups'){
-            data = _groupsDb.where((group) => true).toList();
+            data = _groupsDb;
           }
           if (request.url.queryParameters.isNotEmpty){
             String prefix;
@@ -119,12 +125,22 @@ class InMemoryDataService extends MockClient {
               case 'idOrName':
                 prefix = request.url.queryParameters['idOrName'] ?? '';
                 final regExp = RegExp(prefix, caseSensitive: false);
-                data = _groupsDb.where((group) => group.id.toString().contains(regExp) ||
-                    group.name.contains(regExp)).toList();
+                List<Map<String,dynamic>> groups = List.from(_groupsDb.where((group) => group['id'].toString().contains(regExp) ||
+                    group['name'].contains(regExp)).toList());
+                groups.forEach((group) {
+                  var usersAndAdmins = _getGroupUsersAndAdmins(group);
+                  group['users'] = usersAndAdmins['users'];
+                  group['admins'] = usersAndAdmins['admins'];
+                });
+                data = groups;
                 break;
               case 'id':
                 prefix = request.url.queryParameters['id'] ?? '';
-                data = _groupsDb.firstWhere((group) => group.id.toString() == prefix);
+                Map<String,dynamic> group = Map.from(_groupsDb.firstWhere((group) => group['id'].toString() == prefix));
+                var usersAndAdmins = _getGroupUsersAndAdmins(group);
+                group['users'] = usersAndAdmins['users'];
+                group['admins'] = usersAndAdmins['admins'];
+                data = group;
                 break;
             }
           }
@@ -134,49 +150,48 @@ class InMemoryDataService extends MockClient {
       case 'POST':
         final url = request.url;
         Map<String, dynamic> map = json.decode(request.body);
-        print(url.path);
-        if (url.path.indexOf('/users') >= 0) {
-          map.addAll({'id': '$_nextUserId'});
-          _nextUserId++;
-          var newUser = UserService.fromJson(map);
-          _usersDb.add(newUser);
-          data = newUser;
-        }
-        if (url.path.indexOf('/groups') >= 0) {
-          map.addAll({'id': _nextGroupId});
-          _nextGroupId++;
-          var newGroup = Group.fromJson(map);
-          _groupsDb.add(newGroup);
-          data = newGroup;
-        }
+//        if (url.path.indexOf('/users') >= 0) {
+//          map.addAll({'id': '$_nextUserId'});
+//          _nextUserId++;
+//          var newUser = map;
+//          _usersDb.add(newUser);
+//          data = newUser;
+//        }
+//        if (url.path.indexOf('/groups') >= 0) {
+//          map.addAll({'id': _nextGroupId});
+//          _nextGroupId++;
+//          var newGroup = Group.fromJson(map);
+//          _groupsDb.add(newGroup);
+//          data = newGroup;
+//        }
         break;
       case 'PUT':
         final url = request.url;
         if (url.path.indexOf('/users') >= 0) {
-          var userChanges = UserService.fromJson(json.decode(request.body));
-          var targetUser = _usersDb.firstWhere((h) => h.id == userChanges.id);
-          _usersDb.remove(targetUser);
-          _usersDb.add(userChanges);
-          data = userChanges;
+//          var userChanges = json.decode(request.body);
+//          var targetUser = _usersDb.firstWhere((user) => user['id'] == userChanges['id']);
+//          _usersDb.remove(targetUser);
+//          _usersDb.add(userChanges);
+//          data = userChanges;
         }
         if (url.path.indexOf('/groups') >= 0) {
-          var groupChanges = Group.fromJson(json.decode(request.body));
-          var targetUser = _groupsDb.firstWhere((h) => h.id == groupChanges.id);
-          _groupsDb.remove(targetUser);
-          _groupsDb.add(groupChanges);
-          data = groupChanges;
+//          var groupChanges = Group.fromJson(json.decode(request.body));
+//          var targetUser = _groupsDb.firstWhere((h) => h.id == groupChanges.id);
+//          _groupsDb.remove(targetUser);
+//          _groupsDb.add(groupChanges);
+//          data = groupChanges;
         }
         break;
       case 'DELETE':
         final url = request.url;
-        if (url.path.indexOf('/users') >= 0) {
-          var id = request.url.pathSegments.last;
-          _usersDb.removeWhere((user) => user.id == id);
-        }
-        if (url.path.indexOf('/groups') >= 0) {
-          var id = request.url.pathSegments.last;
-          _groupsDb.removeWhere((group) => group.id.toString() == id);
-        }
+//        if (url.path.indexOf('/users') >= 0) {
+//          var id = request.url.pathSegments.last;
+//          _usersDb.removeWhere((user) => user.id == id);
+//        }
+//        if (url.path.indexOf('/groups') >= 0) {
+//          var id = request.url.pathSegments.last;
+//          _groupsDb.removeWhere((group) => group['id'] == id);
+//        }
         // No data, so leave it as null.
         break;
       default:
@@ -186,19 +201,44 @@ class InMemoryDataService extends MockClient {
         headers: {'content-type': 'application/json'});
   }
 
-  static resetUserDb() {
-    _usersDb = _initialUsers.map((json) => UserService.fromJson(json)).toList();
+  static _getUserGroups(Map<String, dynamic> user){
+    List<Map<String,dynamic>> usersGroups = [];
+    _relationDb.toList().forEach((relation){
+      if (relation['userId'] == user['id']){
+        usersGroups.add(_groupsDb.toList().firstWhere((group) => group['id'] == relation['groupId']));
+      }
+    });
+    return usersGroups;
+  }
+
+  static _getGroupUsersAndAdmins(Map<String, dynamic> group){
+    Map<String, List<Map<String,dynamic>>> usersAndAdmins = {};
+    List<Map<String,dynamic>> groupUsers = [];
+    List<Map<String,dynamic>> groupAdmins = [];
+    _relationDb.toList().forEach((relation){
+      if (relation['groupId'] == group['id']){
+        var user = _usersDb.toList().firstWhere((user) => user['id'] == relation['userId']);
+        groupUsers.add(user);
+//        if (relation['isAdmin']) groupAdmins.add(user);
+      }
+    });
+    usersAndAdmins['users'] = groupUsers;
+    usersAndAdmins['admins'] = groupAdmins;
+    return usersAndAdmins;
+  }
+
+  static _resetUserDb() {
+    _usersDb = _initialUsers.toList();
     _nextUserId = _usersDb.length + 1;
   }
-  static resetGroupDb() {
-    _groupsDb = _initialGroups.map((json) => Group.fromJson(json)).toList();
+  static _resetGroupDb() {
+    _groupsDb = _initialGroups.toList();
     _nextGroupId = _groupsDb.length + 1;
   }
 
-  static resetRelationUserGroupDb() {
-    _relationUserGroupDb = _initialRelationsUserGroup.map((json) {
-      return GroupUserRelation.fromJson(json);
-    }).toList();
+  static _resetRelationUserGroupDb() {
+    _relationDb = _initialRelationsUserGroup..toList();
+    _nextRelationId = _relationDb.length + 1;
   }
 
   InMemoryDataService() : super(_handler);

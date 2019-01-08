@@ -1,35 +1,39 @@
-<div *ngIf="user != null">
-  <div>
-    <label>ID: </label>  {{user.id}}
+<div class="row">
+  <div *ngIf="user != null" class="column">
+    <div>
+      <label>ID: </label>  {{user.id}}
+    </div>
+    <div>
+      <label>User Type: </label>
+      <select [(ngModel)]="currentSelectedUserType">
+        <option *ngFor="let c of userTypes" [ngValue]="c">{{c}}</option>
+      </select>
+    </div>
+    <div>
+      <label>Full Name: </label>
+      <input [(ngModel)]="currentFullName" placeholder="fullName" />
+    </div>
+    <div>
+      <label>e-mail: </label>
+      <input [(ngModel)]="currentEmail" placeholder="e-mail" />
+    </div>
+    <div>
+      <label>Registration Date: </label>
+      <input [(ngModel)]="currentRegDate" placeholder="regDate" />
+    </div>
+    <div *ngIf="currentSelectedUserType.value == 'Regular' || currentSelectedUserType.value == 'Administrator'">
+      <label>Is Administrator: </label>
+      {{isAdmin}}
+    </div>
+    <div *ngIf="currentSelectedUserType.value == 'Administrator'">
+      <label>Access Level: </label>
+      <select [(ngModel)]="currentSelectedAccessLevel">
+        <option *ngFor="let c of accessLevels" [ngValue]="c">{{c}}</option>
+      </select>
+    </div>
+    <button (click)="saveChanges()">Save</button>
   </div>
-  <div>
-    <label>User Type: </label>
-    <select [(ngModel)]="currentSelectedUserType">
-      <option *ngFor="let c of userTypes" [ngValue]="c">{{c}}</option>
-    </select>
+  <div class="column">
+    <user-groups [user]="user"></user-groups>
   </div>
-  <div>
-    <label>Full Name: </label>
-    <input [(ngModel)]="currentFullName" placeholder="fullName" />
-  </div>
-  <div>
-    <label>e-mail: </label>
-    <input [(ngModel)]="currentEmail" placeholder="e-mail" />
-  </div>
-  <div>
-    <label>Registration Date: </label>
-    <input [(ngModel)]="currentRegDate" placeholder="regDate" />
-  </div>
-  <div *ngIf="currentSelectedUserType.value == 'Regular' || currentSelectedUserType.value == 'Administrator'">
-    <label>Is Administrator: </label>
-    {{isAdmin}}
-  </div>
-  <div *ngIf="currentSelectedUserType.value == 'Administrator'">
-    <label>Access Level: </label>
-    <select [(ngModel)]="currentSelectedAccessLevel">
-      <option *ngFor="let c of accessLevels" [ngValue]="c">{{c}}</option>
-    </select>
-  </div>
-  <button (click)="saveChanges()">Save</button>
 </div>
-

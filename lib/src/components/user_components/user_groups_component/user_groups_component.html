@@ -1,0 +1,23 @@
+<h3>User's groups</h3>
+<div style="margin-top: 10px">
+  <!--<button (click)="activateAddNew()">-->
+    <!--Add New Group-->
+  <!--</button>-->
+</div>
+
+<div style="margin-top: 10px">
+  <!--<group-search (goDescription)="goToDescription($event)"></group-search>-->
+</div>
+
+<ul class="groups">
+  <li *ngFor="let group of groups">
+    <span class="badge">{{group.id}}</span>
+    <span>{{group.name}}</span>
+    <!--<button class="delete"-->
+            <!--(click)="delete(group.id); $event.stopPropagation()">x</button>-->
+  </li>
+</ul>
+
+
+
+
