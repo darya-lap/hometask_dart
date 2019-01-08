@@ -40,15 +40,16 @@ class UserComponent implements OnChanges{
   String currentFullName;
   String currentEmail;
   String currentRegDate;
+  bool currentIsAdmin;
 
-  bool get isAdmin {
-    if (isRegular) {
-      return (user as RegularUser).isAdmin;
-    } else if (isAdministrator) {
-      return (user as AdminUser).isAdmin;
-    }
-    return false;
-  }
+//  bool get isAdmin {
+//    if (isRegular) {
+//      return (user as RegularUser).isAdmin;
+//    } else if (isAdministrator) {
+//      return (user as AdminUser).isAdmin;
+//    }
+//    return false;
+//  }
 
   String get accessLevel{
     if(isAdministrator) return (user as AdminUser).accessLevel.value;
@@ -68,13 +69,20 @@ class UserComponent implements OnChanges{
   @override
   void ngOnChanges(Map<String, SimpleChange> changes) {
     currentSelectedUserType = user.userType;
-    if (currentSelectedUserType == UserType.ADMINISTRATOR) currentSelectedAccessLevel = (user as AdminUser).accessLevel;
-    else currentSelectedAccessLevel = AccessLevel.REDUCED;
-    currentFullName = user.fullName;
-    currentEmail = user.email;
-    currentRegDate = user.regDate.toString();
+    if (currentSelectedUserType == UserType.ADMINISTRATOR) {
+      currentSelectedAccessLevel = (user as AdminUser).accessLevel;
+      currentIsAdmin = (user as AdminUser).isAdmin;
+    }
+    else if (currentSelectedUserType == UserType.REGULAR){
+      currentIsAdmin = (user as RegularUser).isAdmin;
+    } else{
+      currentSelectedAccessLevel = AccessLevel.REDUCED;
+      currentFullName = user.fullName;
+      currentEmail = user.email;
+      currentRegDate = user.regDate.toString();
+    }
   }
 
   Map<String, dynamic> toJson() => {'id':user.id, 'regDate':currentRegDate, 'fullName':currentFullName, 'email':currentEmail,
-  'isAdmin':isAdmin, 'userType':currentSelectedUserType.value, 'accessLevel':currentSelectedAccessLevel.value};
+  'isAdmin':currentIsAdmin, 'userType':currentSelectedUserType.value, 'accessLevel':currentSelectedAccessLevel.value};
 }

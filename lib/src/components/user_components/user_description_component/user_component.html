@@ -24,9 +24,11 @@
     </div>
     <div *ngIf="currentSelectedUserType.value == 'Regular' || currentSelectedUserType.value == 'Administrator'">
       <label>Is Administrator: </label>
-      {{isAdmin}}
+      <select [(ngModel)]="currentIsAdmin">
+        <option *ngFor="let c of [true,false]" [ngValue]="c">{{c}}</option>
+      </select>
     </div>
-    <div *ngIf="currentSelectedUserType.value == 'Administrator'">
+    <div *ngIf="currentSelectedUserType.value == 'Administrator' && currentIsAdmin">
       <label>Access Level: </label>
       <select [(ngModel)]="currentSelectedAccessLevel">
         <option *ngFor="let c of accessLevels" [ngValue]="c">{{c}}</option>
