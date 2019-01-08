@@ -71,4 +71,5 @@ button.delete {
 
 .column {
   flex: 50%;
+  max-width: 36%;
 }

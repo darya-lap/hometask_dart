@@ -10,14 +10,10 @@ class RegularUser extends User{
     _isAdmin = admin;
   }
 
-  RegularUser(String id, DateTime regDate, String fullName, String email, bool isAdmin) : super(id, regDate, fullName, email){
+  RegularUser(String id, DateTime regDate, String fullName, String email, bool isAdmin) : super(id, regDate, fullName, email, null){
     this.userType = UserType.REGULAR;
     this.isAdmin = isAdmin;
   }
-
-  @override
-  RegularUser updateFields({DateTime regDate, String fullName, String email, String isAdmin}) =>
-      RegularUser(this.id, regDate ?? this.regDate, fullName ?? this.fullName, email ?? this.email, isAdmin ?? this.isAdmin);
 
   @override
   Map toJson() => {'id':id, 'regDate':regDate.toString(), 'fullName':fullName, 'email':email, 'isAdmin':isAdmin, 'userType':userType.value};

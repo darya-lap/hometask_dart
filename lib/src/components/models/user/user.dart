@@ -1,4 +1,4 @@
-import 'package:angular_tour_of_heroes/src/components/models/user/regular_user.dart';
+import 'package:angular_tour_of_heroes/src/components/models/group/group.dart';
 import 'package:angular_tour_of_heroes/src/enums/user_type.dart';
 
 abstract class User{
@@ -7,11 +7,13 @@ abstract class User{
   String _fullName;
   String _email;
   UserType _userType;
+  List<Group> _groups;
 
-  User(this._id, DateTime regDate, String fullName, String email){
+  User(this._id, DateTime regDate, String fullName, String email, List<Group> groups){
     this.regDate = regDate;
     this.fullName = fullName;
     this.email = email;
+    this.groups = groups;
   }
 
   String get email => _email;
@@ -41,9 +43,14 @@ abstract class User{
     _userType = value;
   }
 
-  User updateFields({DateTime regDate, String fullName, String email});
+
+  List<Group> get groups => _groups;
+
+  set groups(List<Group> value) {
+    _groups = value;
+  }
 
   Map toJson();
 
-  static int userIdToInt(id) => id is int ? id : int.parse(id);
+//  static int userIdToInt(id) => id is int ? id : int.parse(id);
 }
