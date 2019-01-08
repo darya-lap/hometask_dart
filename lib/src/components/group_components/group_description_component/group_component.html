@@ -9,8 +9,19 @@
       <input [(ngModel)]="currentName" placeholder="group name" />
     </div>
     <button (click)="saveChanges()">Save</button>
+    <div style="margin-top: 50px">
+      <label>Group Administrators: </label>
+      <ul class="admins">
+        <li *ngFor="let admin of admins">
+          <span class="badge">{{admin.id}}</span>
+          <span>{{admin.fullName}}</span>
+          <button class="delete"
+                  (click)="delete(admin); $event.stopPropagation()">x</button>
+        </li>
+      </ul>
+    </div>
   </div>
   <div class="column">
-    <group-users [group]="group"></group-users>
+    <group-users [group]="group" (deleteStream)="deleteUser($event)"></group-users>
   </div>
 </div>

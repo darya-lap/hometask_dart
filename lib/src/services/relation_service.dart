@@ -35,10 +35,11 @@ class RelationService {
     }
   }
 
-  Future<void> delete(int groupId, String userId) async {
+  Future<Map<String, dynamic>> delete(int groupId, String userId) async {
     try {
       final url = '$_relationUrl/?userId=$userId&groupId=$groupId';
       await _http.delete(url, headers: _headers);
+      return {'userId':userId, 'groupId':groupId};
     } catch (e) {
       throw _handleError(e);
     }

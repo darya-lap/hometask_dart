@@ -23,6 +23,10 @@ class GroupUsersComponent implements OnChanges {
   List<User> users;
 
   final RelationService _relationService;
+  final _delete= StreamController<String>.broadcast();
+
+  @Output()
+  Stream get deleteStream => _delete.stream;
 
   @Input()
   Group group;
@@ -30,7 +34,9 @@ class GroupUsersComponent implements OnChanges {
   GroupUsersComponent(this._relationService);
 
   Future<void> delete(User user) async {
-    await _relationService.delete(group.id, user.id);
+    await _relationService.delete(group.id, user.id).then((map) {
+      _delete.add(map['userId']);
+    });
     users.remove(user);
   }
 

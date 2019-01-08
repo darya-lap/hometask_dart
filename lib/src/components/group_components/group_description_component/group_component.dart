@@ -4,6 +4,7 @@ import 'package:angular/angular.dart';
 import 'package:angular_forms/angular_forms.dart';
 import 'package:angular_tour_of_heroes/src/components/group_components/group_users_component/group_users_component.dart';
 import 'package:angular_tour_of_heroes/src/components/models/group/group.dart';
+import 'package:angular_tour_of_heroes/src/components/models/user/user.dart';
 import 'package:angular_tour_of_heroes/src/services/group_service.dart';
 
 @Component(
@@ -28,6 +29,7 @@ class GroupComponent implements OnChanges{
   Stream get save => _save.stream;
 
   String currentName;
+  List<User> admins;
 
   GroupComponent(this._groupService);
 
@@ -35,9 +37,20 @@ class GroupComponent implements OnChanges{
     await _groupService.update(toJson()).then((group) {_save.add(group);});
   }
 
+  Future<void> delete(User admin) async {
+//    await _groupService.delete(group.id);
+//    groups.remove(group);
+//    if (selected == group) selected = null;
+  }
+
+  void deleteUser(String userId){
+    admins.removeWhere((admin) => admin.id == userId);
+  }
+
   @override
   void ngOnChanges(Map<String, SimpleChange> changes) {
     currentName = group.name;
+    admins = group.admins;
   }
 
   Map<String, dynamic> toJson() => {'id':group.id, 'name':currentName};
