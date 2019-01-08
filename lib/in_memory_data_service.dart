@@ -88,15 +88,11 @@ class InMemoryDataService extends MockClient {
     switch (request.method) {
       case 'GET':
         final url = request.url;
-        print('DEBUG: IN GET METHOD');
-        print('DEBUG: ${url.path}');
         if (url.path.indexOf('/users') >= 0) {
-          print('DEBUG: CONTAIONS USERS');
           if (url.pathSegments.last == 'users'){
             data = _usersDb.where((user) => true).toList();
           }
           if (request.url.queryParameters.isNotEmpty){
-            print('DEBUG: PARAM IS NOT EMPTY');
             String prefix;
             switch(request.url.queryParameters.keys.first){
               case 'idOrName':
@@ -106,7 +102,6 @@ class InMemoryDataService extends MockClient {
                     user.fullName.contains(regExp)).toList();
                 break;
               case 'id':
-                print('DEBUG: CONTAIN ID');
                 prefix = request.url.queryParameters['id'] ?? '';
                 data = _usersDb.firstWhere((user) => user.id == prefix);
                 break;
@@ -115,13 +110,24 @@ class InMemoryDataService extends MockClient {
         }
 
         if (url.path.indexOf('/groups') >= 0) {
-          if (url.pathSegments.last == 'groups') {
+          if (url.pathSegments.last == 'groups'){
             data = _groupsDb.where((group) => true).toList();
           }
-          String prefix = request.url.queryParameters['idOrName'] ?? '';
-          final regExp = RegExp(prefix, caseSensitive: false);
-          data = _groupsDb.where((group) => group.id.toString().contains(regExp) ||
-              group.name.contains(regExp)).toList();
+          if (request.url.queryParameters.isNotEmpty){
+            String prefix;
+            switch(request.url.queryParameters.keys.first){
+              case 'idOrName':
+                prefix = request.url.queryParameters['idOrName'] ?? '';
+                final regExp = RegExp(prefix, caseSensitive: false);
+                data = _groupsDb.where((group) => group.id.toString().contains(regExp) ||
+                    group.name.contains(regExp)).toList();
+                break;
+              case 'id':
+                prefix = request.url.queryParameters['id'] ?? '';
+                data = _groupsDb.firstWhere((group) => group.id.toString() == prefix);
+                break;
+            }
+          }
         }
 
         break;

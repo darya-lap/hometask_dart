@@ -32,9 +32,6 @@ class UserService {
   Future<User> getUser(String id) async{
     try {
       final response = await _http.get('$_usersUrl/?id=$id');
-      print('DEBUG: response');
-      print('DEBUG: ${_extractData(response)}');
-      print('DEBUG: ${fromJson(_extractData(response))}');
       return fromJson(_extractData(response));
     } catch (e) {
       throw _handleError(e);

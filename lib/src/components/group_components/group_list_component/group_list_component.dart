@@ -49,9 +49,9 @@ class GroupListComponent implements OnInit {
 
   void ngOnInit() => _getGroups();
 
-  void onSelect(Group group) {
+  Future<void> onSelect(Group group) async{
+    await _groupService.getGroup(group.id).then((group) {selected = group;});
     _isAddNewActive = false;
-    selected = group;
   }
 
   void updateContent(Group group){

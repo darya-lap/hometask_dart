@@ -25,6 +25,16 @@ class GroupService {
     }
   }
 
+
+  Future<Group> getGroup(int id) async{
+    try {
+      final response = await _http.get('$_groupsUrl/?id=$id');
+      return Group.fromJson(_extractData(response));
+    } catch (e) {
+      throw _handleError(e);
+    }
+  }
+
   dynamic _extractData(Response resp) => json.decode(resp.body)['data'];
 
   Exception _handleError(dynamic e) {
