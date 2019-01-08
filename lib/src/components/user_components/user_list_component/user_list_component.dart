@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:angular/angular.dart';
-import 'package:angular_router/angular_router.dart';
 import 'package:angular_tour_of_heroes/src/components/user_components/add_user_component/add_user_component.dart';
 import 'package:angular_tour_of_heroes/src/components/models/user/user.dart';
 import 'package:angular_tour_of_heroes/src/components/user_components/user_description_component/user_component.dart';
@@ -21,14 +20,13 @@ import 'package:angular_tour_of_heroes/src/services/user_service.dart';
 class UserListComponent implements OnInit {
   final UserService _userService;
 
-  final Router _router;
   List<User> users;
   User selected;
   bool _isAddNewActive = false;
 
   bool get isAddNewActive => _isAddNewActive;
 
-  UserListComponent(this._userService, this._router);
+  UserListComponent(this._userService);
 
   Future<void> _getUsers() async {
     users = await _userService.getAll();
@@ -46,8 +44,8 @@ class UserListComponent implements OnInit {
 
   void ngOnInit() => _getUsers();
 
-  void onSelect(User user) {
-    selected = user;
+  Future<void> onSelect(User user) async{
+    await _userService.getUser(user.id).then((user) {selected = user;});
     _isAddNewActive = false;
   }
 
@@ -65,11 +63,4 @@ class UserListComponent implements OnInit {
     _isAddNewActive = false;
     selected = user;
   }
-
-
-//  String _heroUrl(int id) =>
-//      RoutePaths.user.toUrl(parameters: {idUserParam: '$id'});
-
-//  Future<NavigationResult> gotoDetail() =>
-//      _router.navigate(_heroUrl(selected.id));
 }
