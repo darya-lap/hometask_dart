@@ -20,6 +20,12 @@ class GroupUserRelation{
 
   Map toJson() => {'userId':userId, 'groupId':groupId, 'isAdmin':isAdmin};
 
-  factory GroupUserRelation.fromJson(Map<String, dynamic> groupUserRelation) =>
-      GroupUserRelation(groupUserRelation['userId'], groupUserRelation['groupId'], groupUserRelation['isAdmin']);
+  factory GroupUserRelation.fromJson(Map<String, dynamic> group) {
+
+    return GroupUserRelation(
+      group['userId'],
+      group['groupId'],
+      group['isAdmin']
+    );
+  }
 }

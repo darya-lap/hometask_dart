@@ -28,7 +28,6 @@ class GroupService {
 
   Future<Group> getGroup(int id) async{
     try {
-      print('DEBUG: 1');
       final response = await _http.get('$_groupsUrl/?id=$id');
       return Group.fromJson(_extractData(response));
     } catch (e) {

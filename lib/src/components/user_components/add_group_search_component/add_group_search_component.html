@@ -1,11 +1,11 @@
 <div id="search-component">
-  <h4>Group Search (by name or id)</h4>
+  <h4>Add new group (Use id or name)</h4>
   <input #searchBox id="search-box"
   (change)="search(searchBox.value)"
   (keyup)="search(searchBox.value)" />
   <div>
     <div *ngFor="let group of groups | async"
-      (click)="gotoDetail(group)" class="search-result" >
+      (click)="addGroup(group)" class="search-result" >
       {{group.name}}
     </div>
   </div>

@@ -3,7 +3,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:angular_tour_of_heroes/src/components/models/group_user_relation/group_user_relation.dart';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
 
@@ -75,7 +74,6 @@ class InMemoryDataService extends MockClient {
   static int _nextGroupId;
 
   static List<Map<String, dynamic>> _relationDb;
-  static int _nextRelationId;
 
 
   static Future<Response> _handler(Request request) async {
@@ -162,6 +160,11 @@ class InMemoryDataService extends MockClient {
           _groupsDb.add(newGroup);
           data = newGroup;
         }
+        if (url.path.indexOf('/relations') >= 0) {
+          var newRelation = map;
+          _relationDb.add(newRelation);
+          data = newRelation;
+        }
         break;
       case 'PUT':
         final url = request.url;
@@ -192,6 +195,12 @@ class InMemoryDataService extends MockClient {
           _groupsDb.removeWhere((group) => group['id'] == id);
           _relationDb.removeWhere((relation) => relation['groupId'].toString() == id);
         }
+        if (url.path.indexOf('/relations') >= 0) {
+          var userId = request.url.queryParameters['userId'];
+          var groupId = request.url.queryParameters['groupId'];
+          _relationDb.removeWhere((relation) => relation['groupId'].toString() == groupId && relation['userId'] == userId);
+
+        }
         break;
       default:
         throw 'Unimplemented HTTP method ${request.method}';
@@ -218,7 +227,7 @@ class InMemoryDataService extends MockClient {
       if (relation['groupId'] == group['id']){
         var user = _usersDb.toList().firstWhere((user) => user['id'] == relation['userId']);
         groupUsers.add(user);
-//        if (relation['isAdmin']) groupAdmins.add(user);
+        if (relation['isAdmin']) groupAdmins.add(user);
       }
     });
     usersAndAdmins['users'] = groupUsers;
@@ -237,7 +246,6 @@ class InMemoryDataService extends MockClient {
 
   static _resetRelationUserGroupDb() {
     _relationDb = _initialRelationsUserGroup..toList();
-    _nextRelationId = _relationDb.length + 1;
   }
 
   InMemoryDataService() : super(_handler);

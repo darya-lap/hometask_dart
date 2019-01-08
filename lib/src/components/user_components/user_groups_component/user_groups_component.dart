@@ -4,6 +4,8 @@ import 'package:angular/angular.dart';
 import 'package:angular_tour_of_heroes/src/components/group_components/group_description_component/group_component.dart';
 import 'package:angular_tour_of_heroes/src/components/models/group/group.dart';
 import 'package:angular_tour_of_heroes/src/components/models/user/user.dart';
+import 'package:angular_tour_of_heroes/src/components/user_components/add_group_search_component/add_group_search_component.dart';
+import 'package:angular_tour_of_heroes/src/services/relation_service.dart';
 
 @Component(
   selector: 'user-groups',
@@ -11,29 +13,25 @@ import 'package:angular_tour_of_heroes/src/components/models/user/user.dart';
   styleUrls: ['user_groups_component.css'],
   directives: [coreDirectives,
     GroupComponent,
- ],
+    AddGroupSearchComponent
+  ],
+  providers: [RelationService,],
   pipes: [commonPipes],
 )
 class UserGroupsComponent implements OnChanges {
 
   List<Group> groups;
-//  Group selected;
+
+  final RelationService _relationService;
 
   @Input()
   User user;
 
-  UserGroupsComponent();
+  UserGroupsComponent(this._relationService);
 
   Future<void> delete(Group group) async {
-//    await _groupService.delete(group.id);
-//    groups.remove(group);
-//    if (selected == group) selected = null;
-  }
-
-  void updateContent(Group group){
-//    var changedGroup = groups.firstWhere((u) => u.id == group.id);
-//    var i = groups.indexOf(changedGroup);
-//    groups.replaceRange(i, i+1, [group]);
+    await _relationService.delete(group.id, user.id);
+    groups.remove(group);
   }
 
   @override

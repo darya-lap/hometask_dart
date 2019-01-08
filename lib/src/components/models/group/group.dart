@@ -47,8 +47,8 @@ class Group{
     return Group(
         group['id'],
         group['name'],
-        null, //(group['users'] != null) ? parseUserList(group['users']) : null,
-        null, //(group['admins'] != null) ? parseUserList(group['admins']) : null,
+        (group['users'] != null) ? parseUserList(group['users']) : null,
+        (group['admins'] != null) ? parseUserList(group['admins']) : null,
     );
   }
 
