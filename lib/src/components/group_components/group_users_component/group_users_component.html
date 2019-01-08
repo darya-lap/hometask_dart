@@ -1,4 +1,4 @@
-<h3>User's groups</h3>
+<h2>Group's users</h2>
 <div style="margin-top: 10px">
   <add-user-search [group]="group"></add-user-search>
 </div>
@@ -7,6 +7,7 @@
   <li *ngFor="let user of users">
     <span class="badge">{{user.id}}</span>
     <span>{{user.fullName}}</span>
+    <button class="delete">MakeAdmin</button>
     <button class="delete"
             (click)="delete(user); $event.stopPropagation()">x</button>
   </li>
