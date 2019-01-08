@@ -22,11 +22,6 @@ class AddGroupSearchComponent implements OnInit {
   Stream<List<Group>> groups;
   StreamController<String> _searchTerms = StreamController<String>.broadcast();
   final RelationService _relationService;
-//  final _toDescriptionStreamController= StreamController<Group>.broadcast();
-//
-//
-//  @Output()
-//  Stream get goDescription => _toDescriptionStreamController.stream;
 
   @Input()
   User user;

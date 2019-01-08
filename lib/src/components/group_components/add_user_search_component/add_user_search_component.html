@@ -1,0 +1,12 @@
+<div id="search-component">
+  <h4>Add new user (Use id or name)</h4>
+  <input #searchBox1 id="search-box1"
+  (change)="search(searchBox1.value)"
+  (keyup)="search(searchBox1.value)" />
+  <div>
+    <div *ngFor="let user of users | async"
+      (click)="addUser(user)" class="search-result" >
+      {{user.fullName}}
+    </div>
+  </div>
+</div>

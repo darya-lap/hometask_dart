@@ -1,0 +1,17 @@
+<h3>User's groups</h3>
+<div style="margin-top: 10px">
+  <add-user-search [group]="group"></add-user-search>
+</div>
+
+<ul class="users">
+  <li *ngFor="let user of users">
+    <span class="badge">{{user.id}}</span>
+    <span>{{user.fullName}}</span>
+    <button class="delete"
+            (click)="delete(user); $event.stopPropagation()">x</button>
+  </li>
+</ul>
+
+
+
+

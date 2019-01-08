@@ -1,11 +1,15 @@
-<div *ngIf="group != null">
-  <div>
-    <label>ID: </label>  {{group.id}}
+<div class="row">
+  <div class="column" *ngIf="group != null">
+    <div>
+      <label>ID: </label>  {{group.id}}
+    </div>
+    <div>
+      <label>Name: </label>
+      <input [(ngModel)]="currentName" placeholder="group name" />
+    </div>
+    <button (click)="saveChanges()">Save</button>
   </div>
-  <div>
-    <label>Name: </label>
-    <input [(ngModel)]="currentName" placeholder="group name" />
+  <div class="column">
+    <group-users [group]="group"></group-users>
   </div>
-  <button (click)="saveChanges()">Save</button>
 </div>
-
