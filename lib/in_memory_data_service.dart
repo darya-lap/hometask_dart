@@ -83,8 +83,6 @@ class InMemoryDataService extends MockClient {
     if (_groupsDb == null) _resetGroupDb();
     if (_relationDb == null) _resetRelationUserGroupDb();
     var data;
-    var relations;
-    List<GroupUserRelation> usersWithGroups;
     switch (request.method) {
       case 'GET':
         final url = request.url;
@@ -150,49 +148,50 @@ class InMemoryDataService extends MockClient {
       case 'POST':
         final url = request.url;
         Map<String, dynamic> map = json.decode(request.body);
-//        if (url.path.indexOf('/users') >= 0) {
-//          map.addAll({'id': '$_nextUserId'});
-//          _nextUserId++;
-//          var newUser = map;
-//          _usersDb.add(newUser);
-//          data = newUser;
-//        }
-//        if (url.path.indexOf('/groups') >= 0) {
-//          map.addAll({'id': _nextGroupId});
-//          _nextGroupId++;
-//          var newGroup = Group.fromJson(map);
-//          _groupsDb.add(newGroup);
-//          data = newGroup;
-//        }
+        if (url.path.indexOf('/users') >= 0) {
+          map.addAll({'id': '$_nextUserId'});
+          _nextUserId++;
+          var newUser = map;
+          _usersDb.add(newUser);
+          data = newUser;
+        }
+        if (url.path.indexOf('/groups') >= 0) {
+          map.addAll({'id': _nextGroupId});
+          _nextGroupId++;
+          var newGroup = map;
+          _groupsDb.add(newGroup);
+          data = newGroup;
+        }
         break;
       case 'PUT':
         final url = request.url;
         if (url.path.indexOf('/users') >= 0) {
-//          var userChanges = json.decode(request.body);
-//          var targetUser = _usersDb.firstWhere((user) => user['id'] == userChanges['id']);
-//          _usersDb.remove(targetUser);
-//          _usersDb.add(userChanges);
-//          data = userChanges;
+          var userChanges = json.decode(request.body);
+          var targetUser = _usersDb.firstWhere((user) => user['id'] == userChanges['id']);
+          _usersDb.remove(targetUser);
+          _usersDb.add(userChanges);
+          data = userChanges;
         }
         if (url.path.indexOf('/groups') >= 0) {
-//          var groupChanges = Group.fromJson(json.decode(request.body));
-//          var targetUser = _groupsDb.firstWhere((h) => h.id == groupChanges.id);
-//          _groupsDb.remove(targetUser);
-//          _groupsDb.add(groupChanges);
-//          data = groupChanges;
+          var groupChanges = json.decode(request.body);
+          var targetUser = _groupsDb.firstWhere((group) => group['id'] == groupChanges['id']);
+          _groupsDb.remove(targetUser);
+          _groupsDb.add(groupChanges);
+          data = groupChanges;
         }
         break;
       case 'DELETE':
         final url = request.url;
-//        if (url.path.indexOf('/users') >= 0) {
-//          var id = request.url.pathSegments.last;
-//          _usersDb.removeWhere((user) => user.id == id);
-//        }
-//        if (url.path.indexOf('/groups') >= 0) {
-//          var id = request.url.pathSegments.last;
-//          _groupsDb.removeWhere((group) => group['id'] == id);
-//        }
-        // No data, so leave it as null.
+        if (url.path.indexOf('/users') >= 0) {
+          var id = request.url.pathSegments.last;
+          _usersDb.removeWhere((user) => user['id'] == id);
+          _relationDb.removeWhere((relation) => relation['userId'] == id);
+        }
+        if (url.path.indexOf('/groups') >= 0) {
+          var id = request.url.pathSegments.last;
+          _groupsDb.removeWhere((group) => group['id'] == id);
+          _relationDb.removeWhere((relation) => relation['groupId'].toString() == id);
+        }
         break;
       default:
         throw 'Unimplemented HTTP method ${request.method}';
