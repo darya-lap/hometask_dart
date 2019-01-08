@@ -22,7 +22,6 @@ class AdminUser extends User{
   }
 
   AdminUser(String id, DateTime regDate, String fullName, String email, AccessLevel level, bool isAdmin, List<Group> groups) : super(id, regDate, fullName, email, groups){
-    print('DEBUG: CONSTRUCTOR');
     this.accessLevel = level;
     this.userType = UserType.ADMINISTRATOR;
     this.isAdmin = isAdmin;
@@ -30,7 +29,7 @@ class AdminUser extends User{
   }
 
   @override
-  Map toJson() => {'id':id, 'regDate':regDate.toString(), 'fullName':fullName, 'email':email, 'isAdmin':isAdmin, 'accessLevel':accessLevel.value, 'userType':userType.value, 'userGroups':json.encode(groups)};
+  Map toJson() => {'id':id, 'regDate':regDate.toString(), 'fullName':fullName, 'email':email, 'isAdmin':isAdmin, 'accessLevel':accessLevel.value, 'userType':userType.value};
 
   factory AdminUser.fromJson(Map<String, dynamic> user) {
     return AdminUser(

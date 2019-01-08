@@ -47,7 +47,9 @@ class GroupListComponent implements OnInit {
     if (selected == group) selected = null;
   }
 
-  void ngOnInit() => _getGroups();
+  void ngOnInit() {
+    _getGroups();
+  }
 
   Future<void> onSelect(Group group) async{
     await _groupService.getGroup(group.id).then((group) {selected = group;});

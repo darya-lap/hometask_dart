@@ -20,7 +20,6 @@ class UserService {
   Future<List<User>> getAll() async {
     try {
       final response = await _http.get(_usersUrl);
-      print('DEBUG: response');
       print('${_extractData(response)}');
       final users = (_extractData(response) as List)
           .map((json) => fromJson(json))
@@ -34,7 +33,6 @@ class UserService {
   Future<User> getUser(String id) async{
     try {
       final response = await _http.get('$_usersUrl/?id=$id');
-      print('DEBUG: ${_extractData(response)}');
       return fromJson(_extractData(response));
     } catch (e) {
       throw _handleError(e);
