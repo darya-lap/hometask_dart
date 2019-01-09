@@ -52,5 +52,11 @@ abstract class User{
 
   Map toJson();
 
-//  static int userIdToInt(id) => id is int ? id : int.parse(id);
+  static List<Group> parseGroupList(List<dynamic> list){
+    List<Group> groups = [];
+    list.forEach((json){
+      groups.add(Group.fromJson(json));
+    });
+    return groups;
+  }
 }

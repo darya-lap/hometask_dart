@@ -31,22 +31,13 @@ class AdminUser extends User{
   @override
   Map toJson() => {'id':id, 'regDate':regDate.toString(), 'fullName':fullName, 'email':email, 'isAdmin':isAdmin, 'accessLevel':accessLevel.value, 'userType':userType.value};
 
-  factory AdminUser.fromJson(Map<String, dynamic> user) {
-    return AdminUser(
+  factory AdminUser.fromJson(Map<String, dynamic> user) => AdminUser(
         user['id'],
         (user['regDate'] != null) ? DateTime.parse(user['regDate']) : null,
         user['fullName'],
         user['email'],
         (user['accessLevel'] != null) ? AccessLevel.parse(user['accessLevel']) : null,
         user['isAdmin'],
-        (user['userGroups'] != null) ? parseGroupList(user['userGroups']) : null);
-  }
+        (user['userGroups'] != null) ? User.parseGroupList(user['userGroups']) : null);
 
-  static List<Group> parseGroupList(List<dynamic> list){
-    List<Group> groups = [];
-    list.forEach((json){
-      groups.add(Group.fromJson(json));
-    });
-    return groups;
-  }
 }

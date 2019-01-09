@@ -10,6 +10,3 @@ pubspec.lock
 doc/api/
 # See https://github.com/dart-lang/site-webdev/issues/1351
 test/**/*.g.dart
-
-*.xml
-.idea/workspace.xml

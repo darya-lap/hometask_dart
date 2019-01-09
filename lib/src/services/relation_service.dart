@@ -2,11 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:angular_tour_of_heroes/src/components/models/group_user_relation/group_user_relation.dart';
-import 'package:angular_tour_of_heroes/src/components/models/user/admin_user.dart';
-import 'package:angular_tour_of_heroes/src/components/models/user/collaborator_user.dart';
-import 'package:angular_tour_of_heroes/src/components/models/user/regular_user.dart';
-import 'package:angular_tour_of_heroes/src/components/models/user/user.dart';
-import 'package:angular_tour_of_heroes/src/enums/user_type.dart';
 import 'package:http/http.dart';
 
 
@@ -35,10 +30,22 @@ class RelationService {
     }
   }
 
-  Future<void> delete(int groupId, String userId) async {
+  Future<GroupUserRelation> update(Map <String, dynamic> jsonMap) async {
+    try {
+      final url = '$_relationUrl/?userId=${jsonMap['userId']}&groupId=${jsonMap['groupId']}}';
+      final response =
+      await _http.put(url, headers: _headers, body: json.encode(jsonMap));
+      return GroupUserRelation.fromJson(_extractData(response));
+    } catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<Map<String, dynamic>> delete(int groupId, String userId) async {
     try {
       final url = '$_relationUrl/?userId=$userId&groupId=$groupId';
       await _http.delete(url, headers: _headers);
+      return {'userId':userId, 'groupId':groupId};
     } catch (e) {
       throw _handleError(e);
     }
