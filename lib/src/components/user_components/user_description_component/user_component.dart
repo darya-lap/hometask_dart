@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:angular/angular.dart';
 import 'package:angular_forms/angular_forms.dart';
+import 'package:angular_tour_of_heroes/src/components/models/group/group.dart';
 import 'package:angular_tour_of_heroes/src/components/models/user/admin_user.dart';
 import 'package:angular_tour_of_heroes/src/components/models/user/regular_user.dart';
 import 'package:angular_tour_of_heroes/src/components/models/user/user.dart';
@@ -41,15 +42,8 @@ class UserComponent implements OnChanges{
   String currentEmail;
   String currentRegDate;
   bool currentIsAdmin;
+  List<Group> adminstratedGroups;
 
-//  bool get isAdmin {
-//    if (isRegular) {
-//      return (user as RegularUser).isAdmin;
-//    } else if (isAdministrator) {
-//      return (user as AdminUser).isAdmin;
-//    }
-//    return false;
-//  }
 
   String get accessLevel{
     if(isAdministrator) return (user as AdminUser).accessLevel.value;
@@ -81,6 +75,7 @@ class UserComponent implements OnChanges{
       currentEmail = user.email;
       currentRegDate = user.regDate.toString();
     }
+    adminstratedGroups = user.administratedGroups;
   }
 
   Map<String, dynamic> toJson() => {'id':user.id, 'regDate':currentRegDate, 'fullName':currentFullName, 'email':currentEmail,

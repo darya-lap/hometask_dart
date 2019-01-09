@@ -97,14 +97,18 @@ class InMemoryDataService extends MockClient {
                 List<Map<String,dynamic>> users = List.from(_usersDb.where((user) => user['id'].contains(regExp) ||
                     user['fullName'].contains(regExp)).toList());
                 users.forEach((user) {
-                  user['userGroups'] = _getUserGroups(user);
+                  var usersGroupsAndAdministratedGroups = _getUserGroups(user);
+                  user['groups'] = usersGroupsAndAdministratedGroups['groups'];
+                  user['administretedGroups'] = usersGroupsAndAdministratedGroups['administretedGroups'];
                 });
                 data = users;
                 break;
               case 'id':
                 prefix = request.url.queryParameters['id'] ?? '';
                 Map<String,dynamic> user = Map.from(_usersDb.firstWhere((user) => user['id'] == prefix));
-                user['userGroups'] = _getUserGroups(user);
+                var usersGroupsAndAdministratedGroups = _getUserGroups(user);
+                user['groups'] = usersGroupsAndAdministratedGroups['groups'];
+                user['administretedGroups'] = usersGroupsAndAdministratedGroups['administretedGroups'];
                 data = user;
                 break;
             }
@@ -217,13 +221,19 @@ class InMemoryDataService extends MockClient {
   }
 
   static _getUserGroups(Map<String, dynamic> user){
-    List<Map<String,dynamic>> usersGroups = [];
+    Map<String, List<Map<String,dynamic>>> usersGroupsAndAdministratedGroups = {};
+    List<Map<String,dynamic>> userGroups = [];
+    List<Map<String,dynamic>> userAdministratedGroups = [];
     _relationDb.toList().forEach((relation){
       if (relation['userId'] == user['id']){
-        usersGroups.add(_groupsDb.toList().firstWhere((group) => group['id'] == relation['groupId']));
+        var group = _groupsDb.toList().firstWhere((group) => group['id'] == relation['groupId']);
+        userGroups.add(group);
+        if (relation['isAdmin']) userAdministratedGroups.add(group);
       }
     });
-    return usersGroups;
+    usersGroupsAndAdministratedGroups['groups'] = userGroups;
+    usersGroupsAndAdministratedGroups['administretedGroups'] = userAdministratedGroups;
+    return usersGroupsAndAdministratedGroups;
   }
 
   static _getGroupUsersAndAdmins(Map<String, dynamic> group){

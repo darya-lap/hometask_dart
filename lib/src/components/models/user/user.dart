@@ -8,12 +8,15 @@ abstract class User{
   String _email;
   UserType _userType;
   List<Group> _groups;
+  List<Group> _administratedGroups;
 
-  User(this._id, DateTime regDate, String fullName, String email, List<Group> groups){
+
+  User(this._id, DateTime regDate, String fullName, String email, List<Group> groups, List<Group> administratedGroups){
     this.regDate = regDate;
     this.fullName = fullName;
     this.email = email;
     this.groups = groups;
+    this._administratedGroups = administratedGroups;
   }
 
   String get email => _email;
@@ -48,6 +51,13 @@ abstract class User{
 
   set groups(List<Group> value) {
     _groups = value;
+  }
+
+
+  List<Group> get administratedGroups => _administratedGroups;
+
+  set administratedGroups(List<Group> value) {
+    _administratedGroups = value;
   }
 
   Map toJson();

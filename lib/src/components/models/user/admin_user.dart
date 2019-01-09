@@ -21,7 +21,8 @@ class AdminUser extends User{
     _isAdmin = admin;
   }
 
-  AdminUser(String id, DateTime regDate, String fullName, String email, AccessLevel level, bool isAdmin, List<Group> groups) : super(id, regDate, fullName, email, groups){
+  AdminUser(String id, DateTime regDate, String fullName, String email, AccessLevel level, bool isAdmin, List<Group> groups, List<Group> administratedGroups)
+      : super(id, regDate, fullName, email, groups, administratedGroups){
     this.accessLevel = level;
     this.userType = UserType.ADMINISTRATOR;
     this.isAdmin = isAdmin;
@@ -38,6 +39,9 @@ class AdminUser extends User{
         user['email'],
         (user['accessLevel'] != null) ? AccessLevel.parse(user['accessLevel']) : null,
         user['isAdmin'],
-        (user['userGroups'] != null) ? User.parseGroupList(user['userGroups']) : null);
+        (user['userGroups'] != null) ? User.parseGroupList(user['userGroups']) : null,
+        (user['administretedGroups'] != null) ? User.parseGroupList(user['administretedGroups']) : null
+  );
+
 
 }

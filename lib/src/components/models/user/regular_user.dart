@@ -11,7 +11,8 @@ class RegularUser extends User{
     _isAdmin = admin;
   }
 
-  RegularUser(String id, DateTime regDate, String fullName, String email, bool isAdmin, List<Group> groups) : super(id, regDate, fullName, email, groups){
+  RegularUser(String id, DateTime regDate, String fullName, String email, bool isAdmin, List<Group> groups, List<Group> administratedGroups)
+      : super(id, regDate, fullName, email, groups, administratedGroups){
     this.userType = UserType.REGULAR;
     this.isAdmin = isAdmin;
   }
@@ -25,5 +26,7 @@ class RegularUser extends User{
       user['fullName'],
       user['email'],
       user['isAdmin'],
-      (user['userGroups'] != null) ? User.parseGroupList(user['userGroups']) : null);
+      (user['userGroups'] != null) ? User.parseGroupList(user['userGroups']) : null,
+      (user['administretedGroups'] != null) ? User.parseGroupList(user['administretedGroups']) : null
+  );
 }

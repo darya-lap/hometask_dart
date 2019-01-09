@@ -3,7 +3,8 @@ import 'package:angular_tour_of_heroes/src/components/models/user/user.dart';
 import 'package:angular_tour_of_heroes/src/enums/user_type.dart';
 
 class CollaboratorUser extends User{
-  CollaboratorUser(String id, DateTime regDate, String fullName, String email, List<Group> groups) : super(id, regDate, fullName, email, groups){
+  CollaboratorUser(String id, DateTime regDate, String fullName, String email, List<Group> groups, List<Group> administratedGroups)
+      : super(id, regDate, fullName, email, groups, administratedGroups){
     this.userType = UserType.COLLABORATOR;
   }
 
@@ -15,6 +16,7 @@ class CollaboratorUser extends User{
         (user['regDate'] != null) ? DateTime.parse(user['regDate']) : null,
         user['fullName'],
         user['email'],
-        (user['userGroups'] != null) ? User.parseGroupList(user['userGroups']) : null
-    );
+        (user['userGroups'] != null) ? User.parseGroupList(user['userGroups']) : null,
+        (user['administretedGroups'] != null) ? User.parseGroupList(user['administretedGroups']) : null
+  );
 }

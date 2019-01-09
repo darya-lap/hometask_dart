@@ -24,9 +24,7 @@
     </div>
     <div *ngIf="currentSelectedUserType.value == 'Regular' || currentSelectedUserType.value == 'Administrator'">
       <label>Is Administrator: </label>
-      <select [(ngModel)]="currentIsAdmin">
-        <option *ngFor="let c of [true,false]" [ngValue]="c">{{c}}</option>
-      </select>
+      {{adminstratedGroups.isNotEmpty}}
     </div>
     <div *ngIf="currentSelectedUserType.value == 'Administrator' && currentIsAdmin">
       <label>Access Level: </label>
@@ -35,6 +33,15 @@
       </select>
     </div>
     <button (click)="saveChanges()">Save</button>
+    <div style="margin-top: 50px">
+      <label>Administrated groups: </label>
+      <ul class="administratedGroups">
+        <li *ngFor="let group of adminstratedGroups">
+          <span class="badge">{{group.id}}</span>
+          <span>{{group.name}}</span>
+        </li>
+      </ul>
+    </div>
   </div>
   <div class="column">
     <user-groups [user]="user"></user-groups>
