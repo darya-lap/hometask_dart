@@ -15,12 +15,11 @@ import 'package:stream_transform/stream_transform.dart';
   pipes: [commonPipes],
 )
 class GroupSearchComponent implements OnInit {
-  GroupSearchService _groupSearchService;
-
-  Stream<List<Group>> groups;
-  StreamController<String> _searchTerms = StreamController<String>.broadcast();
+  final GroupSearchService _groupSearchService;
+  final StreamController<String> _searchTerms = StreamController<String>.broadcast();
   final _toDescriptionStreamController= StreamController<Group>.broadcast();
 
+  Stream<List<Group>> groups;
 
   @Output()
   Stream get goDescription => _toDescriptionStreamController.stream;

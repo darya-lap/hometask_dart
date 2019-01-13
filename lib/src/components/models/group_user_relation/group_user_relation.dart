@@ -5,14 +5,13 @@ class GroupUserRelation{
 
   String get userId => _userId;
 
+  int get groupId => _groupId;
 
   bool get isAdmin => _isAdmin;
 
   set isAdmin(bool value) {
     _isAdmin = value;
   }
-
-  int get groupId => _groupId;
 
   GroupUserRelation(this._userId, this._groupId, bool isAdmin){
     this.isAdmin = isAdmin;

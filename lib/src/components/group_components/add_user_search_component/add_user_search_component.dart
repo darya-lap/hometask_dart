@@ -17,11 +17,11 @@ import 'package:stream_transform/stream_transform.dart';
   pipes: [commonPipes],
 )
 class AddUserSearchComponent implements OnInit {
-  UserSearchService _userSearchService;
+  final UserSearchService _userSearchService;
+  final StreamController<String> _searchTerms = StreamController<String>.broadcast();
+  final RelationService _relationService;
 
   Stream<List<User>> users;
-  StreamController<String> _searchTerms = StreamController<String>.broadcast();
-  final RelationService _relationService;
 
   @Input()
   Group group;

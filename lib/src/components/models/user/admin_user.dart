@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:angular_tour_of_heroes/src/components/models/group/group.dart';
 import 'package:angular_tour_of_heroes/src/components/models/user/user.dart';
 import 'package:angular_tour_of_heroes/src/enums/access_level.dart';
@@ -42,6 +40,4 @@ class AdminUser extends User{
         (user['userGroups'] != null) ? User.parseGroupList(user['userGroups']) : null,
         (user['administretedGroups'] != null) ? User.parseGroupList(user['administretedGroups']) : null
   );
-
-
 }

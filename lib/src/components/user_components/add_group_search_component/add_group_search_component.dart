@@ -7,7 +7,6 @@ import 'package:angular_tour_of_heroes/src/services/group_search_service.dart';
 import 'package:angular_tour_of_heroes/src/services/relation_service.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-
 @Component(
   selector: 'add-group-search',
   templateUrl: 'add_group_search_component.html',
@@ -17,11 +16,11 @@ import 'package:stream_transform/stream_transform.dart';
   pipes: [commonPipes],
 )
 class AddGroupSearchComponent implements OnInit {
-  GroupSearchService _groupSearchService;
+  final GroupSearchService _groupSearchService;
+  final RelationService _relationService;
+  final StreamController<String> _searchTerms = StreamController<String>.broadcast();
 
   Stream<List<Group>> groups;
-  StreamController<String> _searchTerms = StreamController<String>.broadcast();
-  final RelationService _relationService;
 
   @Input()
   User user;
@@ -38,7 +37,7 @@ class AddGroupSearchComponent implements OnInit {
             ? Stream<List<Group>>.fromIterable([<Group>[]])
             : _groupSearchService.search(term).asStream()))
         .handleError((e) {
-      print(e); // for demo purposes only
+      print(e);
     });
   }
 

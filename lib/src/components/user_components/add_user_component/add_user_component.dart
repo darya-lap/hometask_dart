@@ -15,14 +15,11 @@ import 'package:angular_tour_of_heroes/src/services/user_service.dart';
   directives: [coreDirectives, formDirectives],
 )
 class AddUserComponent implements OnInit{
-
   final UserService _userService;
-  final userTypes = UserType.values;
-  final accessLevels = AccessLevel.values;
   final _addStreamController= StreamController<User>.broadcast();
 
-  @Output()
-  Stream get add => _addStreamController.stream;
+  final userTypes = UserType.values;
+  final accessLevels = AccessLevel.values;
 
   UserType currentSelectedUserType;
   AccessLevel currentSelectedAccessLevel;
@@ -30,6 +27,8 @@ class AddUserComponent implements OnInit{
   String currentEmail;
   String currentRegDate;
 
+  @Output()
+  Stream get add => _addStreamController.stream;
 
   AddUserComponent(this._userService);
 

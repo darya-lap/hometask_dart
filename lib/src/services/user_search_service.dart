@@ -5,7 +5,6 @@ import 'package:angular_tour_of_heroes/src/components/models/user/user.dart';
 import 'package:angular_tour_of_heroes/src/services/user_service.dart';
 import 'package:http/http.dart';
 
-
 class UserSearchService {
   final Client _http;
 
@@ -25,7 +24,7 @@ class UserSearchService {
   dynamic _extractData(Response resp) => json.decode(resp.body)['data'];
 
   Exception _handleError(dynamic e) {
-    print(e); // for demo purposes only
+    print(e);
     return Exception('Server error; cause: $e');
   }
 }

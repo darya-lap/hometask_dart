@@ -19,10 +19,9 @@ import 'package:angular_tour_of_heroes/src/services/relation_service.dart';
   pipes: [commonPipes],
 )
 class UserGroupsComponent implements OnChanges {
+  final RelationService _relationService;
 
   List<Group> groups;
-
-  final RelationService _relationService;
 
   @Input()
   User user;

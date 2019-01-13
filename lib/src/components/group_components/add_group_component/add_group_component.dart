@@ -12,14 +12,13 @@ import 'package:angular_tour_of_heroes/src/services/group_service.dart';
   directives: [coreDirectives, formDirectives],
 )
 class AddGroupComponent implements OnInit{
-
   final GroupService _groupService;
   final _addStreamController= StreamController<Group>.broadcast();
 
+  String currentName;
+
   @Output()
   Stream get add => _addStreamController.stream;
-
-  String currentName;
 
   AddGroupComponent(this._groupService);
 

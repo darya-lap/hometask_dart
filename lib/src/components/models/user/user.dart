@@ -10,7 +10,6 @@ abstract class User{
   List<Group> _groups;
   List<Group> _administratedGroups;
 
-
   User(this._id, DateTime regDate, String fullName, String email, List<Group> groups, List<Group> administratedGroups){
     this.regDate = regDate;
     this.fullName = fullName;

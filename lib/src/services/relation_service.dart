@@ -16,7 +16,7 @@ class RelationService {
   dynamic _extractData(Response resp) => json.decode(resp.body)['data'];
 
   Exception _handleError(dynamic e) {
-    print(e); // for demo purposes only
+    print(e);
     return Exception('Server error; cause: $e');
   }
 

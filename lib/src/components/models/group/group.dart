@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:angular_tour_of_heroes/src/components/models/user/user.dart';
 import 'package:angular_tour_of_heroes/src/services/user_service.dart';
 
@@ -27,7 +25,6 @@ class Group{
   set id(int value) {
     _id = value;
   }
-
 
   List<User> get users => _users;
 

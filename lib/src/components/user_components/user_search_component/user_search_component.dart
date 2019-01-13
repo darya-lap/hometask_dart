@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:angular/angular.dart';
-import 'package:angular_router/angular_router.dart';
 import 'package:angular_tour_of_heroes/src/components/models/user/user.dart';
 import 'package:angular_tour_of_heroes/src/services/user_search_service.dart';
 import 'package:stream_transform/stream_transform.dart';
@@ -17,11 +16,10 @@ import 'package:stream_transform/stream_transform.dart';
 )
 class UserSearchComponent implements OnInit {
   UserSearchService _userSearchService;
-
-  Stream<List<User>> users;
-  StreamController<String> _searchTerms = StreamController<String>.broadcast();
+  final _searchTerms = StreamController<String>.broadcast();
   final _toDescriptionStreamController= StreamController<User>.broadcast();
 
+  Stream<List<User>> users;
 
   @Output()
   Stream get goDescription => _toDescriptionStreamController.stream;
@@ -38,12 +36,9 @@ class UserSearchComponent implements OnInit {
             ? Stream<List<User>>.fromIterable([<User>[]])
             : _userSearchService.search(term).asStream()))
         .handleError((e) {
-      print(e); // for demo purposes only
+      print(e);
     });
   }
-
-//  String _heroUrl(int id) =>
-//      RoutePaths.users.toUrl(parameters: {idUserParam: '$id'});
 
   void gotoDetail(User user) => _toDescriptionStreamController.add(user);
 }

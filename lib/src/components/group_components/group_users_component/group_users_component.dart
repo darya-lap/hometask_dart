@@ -19,17 +19,16 @@ import 'package:angular_tour_of_heroes/src/services/relation_service.dart';
   pipes: [commonPipes],
 )
 class GroupUsersComponent implements OnChanges {
-
-  List<User> users;
-
   final RelationService _relationService;
   final _changes= StreamController<Map<String,dynamic>>.broadcast();
 
-  @Output()
-  Stream get changesStream => _changes.stream;
+  List<User> users;
 
   @Input()
   Group group;
+
+  @Output()
+  Stream get changesStream => _changes.stream;
 
   GroupUsersComponent(this._relationService);
 
@@ -45,8 +44,6 @@ class GroupUsersComponent implements OnChanges {
       _changes.add({'makeAdmin':user.id});
     });
   }
-
-
 
   bool isAdmin(User user){
     return group.admins.where((userMap) => userMap.id == user.id).isNotEmpty;

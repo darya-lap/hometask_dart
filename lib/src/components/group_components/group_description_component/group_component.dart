@@ -18,20 +18,19 @@ import 'package:angular_tour_of_heroes/src/services/relation_service.dart';
   ],
 )
 class GroupComponent implements OnChanges{
+  final GroupService _groupService;
+  final RelationService _relationService;
 
-  GroupService _groupService;
-  RelationService _relationService;
+  final _save= StreamController<Group>.broadcast();
+
+  String currentName;
+  List<User> admins;
 
   @Input()
   Group group;
 
-  final _save= StreamController<Group>.broadcast();
-
   @Output()
   Stream get save => _save.stream;
-
-  String currentName;
-  List<User> admins;
 
   GroupComponent(this._groupService, this._relationService);
 

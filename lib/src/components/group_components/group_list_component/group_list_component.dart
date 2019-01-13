@@ -22,10 +22,10 @@ import 'package:angular_tour_of_heroes/src/services/relation_service.dart';
 )
 class GroupListComponent implements OnInit {
   final GroupService _groupService;
+  bool _isAddNewActive = false;
 
   List<Group> groups;
   Group selected;
-  bool _isAddNewActive = false;
 
   bool get isAddNewActive => _isAddNewActive;
 

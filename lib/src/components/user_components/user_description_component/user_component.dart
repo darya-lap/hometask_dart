@@ -21,20 +21,12 @@ import 'package:angular_tour_of_heroes/src/services/user_service.dart';
   ],
 )
 class UserComponent implements OnChanges{
-
-  @Input()
-  User user;
-
   final UserService _userService;
-  final userTypes = UserType.values;
-  final accessLevels = AccessLevel.values;
+
   final _save= StreamController<User>.broadcast();
 
-  @Output()
-  Stream get save => _save.stream;
-
-  bool get isRegular => user.userType == UserType.REGULAR;
-  bool get isAdministrator => user.userType == UserType.ADMINISTRATOR;
+  final userTypes = UserType.values;
+  final accessLevels = AccessLevel.values;
 
   UserType currentSelectedUserType;
   AccessLevel currentSelectedAccessLevel;
@@ -44,6 +36,14 @@ class UserComponent implements OnChanges{
   bool currentIsAdmin;
   List<Group> adminstratedGroups;
 
+  @Input()
+  User user;
+
+  @Output()
+  Stream get save => _save.stream;
+
+  bool get isRegular => user.userType == UserType.REGULAR;
+  bool get isAdministrator => user.userType == UserType.ADMINISTRATOR;
 
   String get accessLevel{
     if(isAdministrator) return (user as AdminUser).accessLevel.value;
@@ -69,12 +69,14 @@ class UserComponent implements OnChanges{
     }
     else if (currentSelectedUserType == UserType.REGULAR){
       currentIsAdmin = (user as RegularUser).isAdmin;
-    } else{
       currentSelectedAccessLevel = AccessLevel.REDUCED;
-      currentFullName = user.fullName;
-      currentEmail = user.email;
-      currentRegDate = user.regDate.toString();
+    } else{
+      currentIsAdmin = false;
+      currentSelectedAccessLevel = AccessLevel.REDUCED;
     }
+    currentFullName = user.fullName;
+    currentEmail = user.email;
+    currentRegDate = user.regDate.toString();
     adminstratedGroups = user.administratedGroups;
   }
 
